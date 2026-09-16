@@ -5,7 +5,7 @@ from tkinter import messagebox
 # These numbers and text limits stay the same so the gui runs according to the requirements
 MIN_QTY = 1
 MAX_QTY = 500
-DATE_HINT = "DD/MM/YYYY"
+DATE_HINT = "DD/MM/YYYY" 
 
 # This main list holds all the saved hire records in one place as a 2D list
 hire_list = []

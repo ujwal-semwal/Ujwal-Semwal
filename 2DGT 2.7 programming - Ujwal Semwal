@@ -1,0 +1,99 @@
+import tkinter as tk
+from tkinter import messagebox
+
+# This main list holds all the saved hire records in a 2D list
+hire_list = [] 
+ 
+def validate_inputs(name, receipt, item):
+    # Core function checks for blank inputs
+    if not name or not receipt or not item:
+        return False, "All fields must be filled in."
+ 
+    # Core function checks that receipt is numbers only 
+    if not receipt.isdigit():
+        return False, "Receipt number must be numbers only."
+
+    return True, None
+
+def add_hire_record():
+    # Fetch string values from input entry boxes
+    name = entry_name.get().strip()
+    receipt = entry_receipt.get().strip()
+    item = entry_item.get().strip()
+
+    # Run core validation routine
+    is_valid, error_msg = validate_inputs(name, receipt, item)
+
+    if not is_valid:
+        messagebox.showerror("Input Error", error_msg)
+        return
+
+    # Append new record to the main collection
+    hire_list.append([name, receipt, item])
+
+    # Update listbox and wipe text fields clean
+    refresh_display()
+    clear_form()
+    messagebox.showinfo("Success", "Record added successfully!")
+
+def delete_hire_record():
+    # Remove selected row index from the list collection
+    selected = listbox_hires.curselection()
+
+    if not selected:
+        messagebox.showerror("Selection Error", "Please select a record to delete.")
+        return
+
+    index = selected[0]
+    del hire_list[index]
+    refresh_display()
+
+def refresh_display():
+    # Clear visual window box and loop to show updated list arrays
+    listbox_hires.delete(0, tk.END)
+    for row in hire_list:
+        display_string = f"Customer Name: {row[0]}  |  Receipt #: {row[1]}  |  Item: {row[2]}"
+        listbox_hires.insert(tk.END, display_string)
+
+def clear_form():
+    # Reset simple text windows to empty strings
+    entry_name.delete(0, tk.END)
+    entry_receipt.delete(0, tk.END)
+    entry_item.delete(0, tk.END)
+
+# Setup fundamental window window sizes
+root = tk.Tk()
+root.title("Julie's Party Hire - Prototype")
+root.geometry("500x550")
+root.configure(bg="#eef2f5")
+
+# Application title element banner
+tk.Label(root, text="Party Hire System (Draft)", font=("Helvetica", 16, "bold"), bg="#eef2f5").pack(pady=10)
+
+# Entry form layout section labels and inputs
+tk.Label(root, text="Customer Full Name:", font=("Helvetica", 10), bg="#eef2f5").pack()
+entry_name = tk.Entry(root, width=35)
+entry_name.pack(pady=2)
+
+tk.Label(root, text="Receipt Number:", font=("Helvetica", 10), bg="#eef2f5").pack()
+entry_receipt = tk.Entry(root, width=35)
+entry_receipt.pack(pady=2)
+
+tk.Label(root, text="Item Hired:", font=("Helvetica", 10), bg="#eef2f5").pack()
+entry_item = tk.Entry(root, width=35)
+entry_item.pack(pady=2)
+
+# Action system management submit button
+btn_add = tk.Button(root, text="Add Hire Record", command=add_hire_record, bg="#27ae60", fg="white", width=20)
+btn_add.pack(pady=15)
+
+# Visual tracker list components 
+tk.Label(root, text="Current Hires Out:", font=("Helvetica", 10, "bold"), bg="#eef2f5").pack()
+listbox_hires = tk.Listbox(root, width=55, height=8)
+listbox_hires.pack(pady=5)
+
+# Action system management removal button
+btn_delete = tk.Button(root, text="Delete Selected Record", command=delete_hire_record, bg="#c0392b", fg="white", width=20)
+btn_delete.pack(pady=5)
+
+root.mainloop()

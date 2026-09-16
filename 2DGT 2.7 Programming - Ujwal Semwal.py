@@ -1,217 +1,221 @@
-import random
 import datetime
 import tkinter as tk
 from tkinter import messagebox
 
-# Standard setup values
-MAX_BOX = 25
+# These numbers and text limits stay the same so the gui runs according to the requirements
 MIN_QTY = 1
 MAX_QTY = 500
 DATE_HINT = "DD/MM/YYYY"
 
-# Main data lists
+# This main list holds all the saved hire records in one place as a 2D list
 hire_list = []
-raffle_list = []
 
+def validate_inputs(name, receipt, item, qty_text, start_date, return_date):
+    # this function checks the validity of inputs to make sure no fields are left blank
+    if not name or not receipt or not item or not qty_text or not start_date or not return_date:
+        return False, "All fields must be filled in."
 
-def calculate_boxes(qty):
-    # Calculates how many boxes are needed
-    return (qty + MAX_BOX - 1) // MAX_BOX
-
-
-def validate_inputs(name, receipt, item, qty_str, start_date, return_date):
-    # Check for empty entries or placeholders
-    if not (name.strip() and receipt.strip() and item.strip() and 
-            qty_str.strip() and start_date.strip() and return_date.strip()):
-        return False, "All fields are required."
-
+    # this function checks the validity of date fields to make sure default placeholders are replaced
     if start_date == DATE_HINT or return_date == DATE_HINT:
-        return False, "Please enter valid dates."
+        return False, "Please enter actual dates, not placeholders."
 
-    # Name validation
+    # this function checks the validity of the customer name so it only contains letters and spaces
     if not name.replace(" ", "").isalpha():
-        return False, "Name must contain only letters."
+        return False, "Customer name can only contain letters."
 
-    # Quantity validation
+    # this function checks the validity of the receipt number so it only contains numbers
+    if not receipt.isdigit():
+        return False, "Receipt number must be numbers only."
+
+    # this function checks the validity of the quantity so it is a whole number within limits
+    if not qty_text.isdigit():
+        return False, "Quantity must be a valid whole number."
+
+    quantity = int(qty_text)
+    if quantity < MIN_QTY or quantity > MAX_QTY:
+        return False, f"Quantity must be between {MIN_QTY} and {MAX_QTY}."
+
+    # this function checks the validity of dates for correct format and logical timeline order
     try:
-        qty = int(qty_str)
-        if qty < MIN_QTY or qty > MAX_QTY:
-            return False, f"Quantity must be between {MIN_QTY} and {MAX_QTY}."
+        start_dt = datetime.datetime.strptime(start_date, "%d/%m/%Y")
+        return_dt = datetime.datetime.strptime(return_date, "%d/%m/%Y")
     except ValueError:
-        return False, "Quantity must be a whole number."
+        return False, "Dates must follow DD/MM/YYYY format."
 
-    # Date validation
-    for d_str, label in [(start_date, "Start Date"), (return_date, "Return Date")]:
-        try:
-            datetime.datetime.strptime(d_str, "%d/%m/%Y")
-        except ValueError:
-            return False, f"Invalid {label}. Use DD/MM/YYYY format."
+    # this function checks the validity of the return date so it is not before the hire date
+    if return_dt < start_dt:
+        return False, "Return date cannot be before hire start date."
 
-    return True, qty
+    return True, quantity
 
 
-# Placeholder functions
-def add_placeholder(entry):
-    entry.insert(0, DATE_HINT)
-    entry.config(fg="grey")
+def set_placeholder(entry_box):
+    # this function puts the default placeholder text inside the date entry box in grey
+    entry_box.insert(0, DATE_HINT)
+    entry_box.config(fg="grey")
 
 
-def on_focus_in(event, entry):
-    if entry.get() == DATE_HINT:
-        entry.delete(0, tk.END)
-        entry.config(fg="black")
+def clear_placeholder(event, entry_box):
+    # this function clears the placeholder text when the user clicks inside the entry box
+    if entry_box.get() == DATE_HINT:
+        entry_box.delete(0, tk.END)
+        entry_box.config(fg="black")
 
 
-def on_focus_out(event, entry):
-    if not entry.get().strip():
-        add_placeholder(entry)
+def restore_placeholder(event, entry_box):
+    # this function brings back the placeholder text if the entry box is left empty
+    if not entry_box.get().strip():
+        set_placeholder(entry_box)
 
 
-# Button actions
-def add_hire():
-    name = entry_name.get()
-    receipt = entry_receipt.get()
-    item = entry_item.get()
-    qty_str = entry_quantity.get()
-    start_date = entry_start.get()
-    return_date = entry_return.get()
+def add_hire_record():
+    # this function gets all string values entered into the gui entry boxes
+    name = entry_name.get().strip()
+    receipt = entry_receipt.get().strip()
+    item = entry_item.get().strip()
+    qty_text = entry_quantity.get().strip()
+    start_date = entry_start.get().strip()
+    return_date = entry_return.get().strip()
 
-    is_valid, result = validate_inputs(name, receipt, item, qty_str, start_date, return_date)
+    # this function runs the validation subroutine and checks if inputs passed validity
+    is_valid, result = validate_inputs(name, receipt, item, qty_text, start_date, return_date)
 
     if not is_valid:
-        messagebox.showerror("Error", result)
+        messagebox.showerror("Input Error", result)
         return
 
-    qty = result
-    boxes = calculate_boxes(qty)
-    raffle_num = random.randint(1, 1000)
+    quantity = result
 
-    # Store in lists
-    hire_list.append([name.strip(), receipt.strip(), item.strip(), qty, start_date.strip(), return_date.strip(), boxes])
-    raffle_list.append([name.strip(), raffle_num])
+    # this function appends a new list item into the main 2D hire list collection
+    hire_list.append([name, receipt, item, quantity, start_date, return_date])
 
-    update_display()
-    clear_entries()
-    messagebox.showinfo("Success", f"Item added! Raffle Ticket: #{raffle_num}")
+    # this function updates the listbox output and clears the input form
+    refresh_display()
+    clear_form()
+    messagebox.showinfo("Success", "Hire record added successfully!")
 
 
-def delete_hire():
+def delete_hire_record():
+    # this function gets the selected index from listbox and removes it from the 2D hire list
     selected = listbox_hires.curselection()
 
     if not selected:
-        messagebox.showerror("Error", "Please select an item to delete.")
+        messagebox.showerror("Selection Error", "Please select a record from the list to delete.")
         return
 
     index = selected[0]
-    
-    # Delete from BOTH lists so terminal matches GUI
     del hire_list[index]
-    del raffle_list[index]
 
-    update_display()
-    messagebox.showinfo("Success", "Record deleted.")
+    # this function refreshes the listbox display after removing the selected item
+    refresh_display()
+    messagebox.showinfo("Success", "Record deleted successfully.")
 
 
-def update_display():
+def refresh_display():
+    # this function clears the listbox and loops through the 2D hire list to display formatted records
     listbox_hires.delete(0, tk.END)
     for row in hire_list:
-        info = f"Name: {row[0]} | Receipt: {row[1]} | Item: {row[2]} (x{row[3]}) | Out: {row[4]} | Return: {row[5]} | Boxes: {row[6]}"
-        listbox_hires.insert(tk.END, info)
+        display_string = f"Name: {row[0]} | Receipt #: {row[1]} | Item: {row[2]} | Qty: {row[3]} | Start: {row[4]} | Return: {row[5]}"
+        listbox_hires.insert(tk.END, display_string)
 
 
-def print_raffle_list():
-    print("\n--- JULIE'S PARTY HIRE RAFFLE LIST ---")
-    if not raffle_list:
-        print("No raffle entries yet.")
-    else:
-        for item in raffle_list:
-            print(f"Customer: {item[0]} | Ticket: #{item[1]}")
-    print("--------------------------------------\n")
-
-
-def clear_entries():
+def clear_form():
+    # this function resets all text entry boxes back to blank or default placeholders
     entry_name.delete(0, tk.END)
     entry_receipt.delete(0, tk.END)
     entry_item.delete(0, tk.END)
     entry_quantity.delete(0, tk.END)
-    
+
     entry_start.delete(0, tk.END)
-    add_placeholder(entry_start)
-    
+    set_placeholder(entry_start)
+
     entry_return.delete(0, tk.END)
-    add_placeholder(entry_return)
+    set_placeholder(entry_return)
 
 
-# GUI Setup
+def close_application():
+    # this function closes and destroys the main tkinter window
+    root.destroy()
+
+# this sets up the main tkinter GUI window size and background colour
 root = tk.Tk()
 root.title("Julie's Party Hire Tracking System")
-root.geometry("800x680")
+root.geometry("800x620")
+root.configure(bg="#eef2f5")
 
-# Form Inputs
-tk.Label(root, text="Customer Full Name:").pack(pady=(5, 0))
+# this creates the top main heading label with custom text size and colors
+lbl_title = tk.Label(root, text="Julie's Party Hire Tracking System", font=("Helvetica", 18, "bold"), bg="#eef2f5", fg="#2c3e50")
+lbl_title.pack(pady=10)
+
+# this creates the label and text entry box for the customer full name
+tk.Label(root, text="Customer Full Name:", font=("Helvetica", 10, "bold"), bg="#eef2f5").pack(pady=(4, 0))
 entry_name = tk.Entry(root, width=40)
-entry_name.pack()
+entry_name.pack(pady=2)
 
-tk.Label(root, text="Receipt Number:").pack(pady=(5, 0))
+# this creates the label and text entry box for the receipt number
+tk.Label(root, text="Receipt Number:", font=("Helvetica", 10, "bold"), bg="#eef2f5").pack(pady=(4, 0))
 entry_receipt = tk.Entry(root, width=40)
-entry_receipt.pack()
+entry_receipt.pack(pady=2)
 
-tk.Label(root, text="Item Hired:").pack(pady=(5, 0))
+# this creates the label and text entry box for the hired item name
+tk.Label(root, text="Item Hired:", font=("Helvetica", 10, "bold"), bg="#eef2f5").pack(pady=(4, 0))
 entry_item = tk.Entry(root, width=40)
-entry_item.pack()
+entry_item.pack(pady=2)
 
-tk.Label(root, text=f"Quantity ({MIN_QTY}-{MAX_QTY}):").pack(pady=(5, 0))
+# this creates the label and text entry box for quantity with boundary values shown
+tk.Label(root, text=f"Quantity ({MIN_QTY}-{MAX_QTY}):", font=("Helvetica", 10, "bold"), bg="#eef2f5").pack(pady=(4, 0))
 entry_quantity = tk.Entry(root, width=40)
-entry_quantity.pack()
+entry_quantity.pack(pady=2)
 
-tk.Label(root, text="Date Hired From:").pack(pady=(5, 0))
+# this creates the start date box and listens for when the customer clicks it
+tk.Label(root, text="Date Hired From:", font=("Helvetica", 10, "bold"), bg="#eef2f5").pack(pady=(4, 0))
 entry_start = tk.Entry(root, width=40)
-add_placeholder(entry_start)
-entry_start.bind("<FocusIn>", lambda e: on_focus_in(e, entry_start))
-entry_start.bind("<FocusOut>", lambda e: on_focus_out(e, entry_start))
-entry_start.pack()
+set_placeholder(entry_start)
+entry_start.bind("<FocusIn>", lambda event: clear_placeholder(event, entry_start))
+entry_start.bind("<FocusOut>", lambda event: restore_placeholder(event, entry_start))
+entry_start.pack(pady=2)
 
-tk.Label(root, text="Return Date:").pack(pady=(5, 0))
+# this creates the return date entry field and listens for when the customer clicks it
+tk.Label(root, text="Return Date:", font=("Helvetica", 10, "bold"), bg="#eef2f5").pack(pady=(4, 0))
 entry_return = tk.Entry(root, width=40)
-add_placeholder(entry_return)
-entry_return.bind("<FocusIn>", lambda e: on_focus_in(e, entry_return))
-entry_return.bind("<FocusOut>", lambda e: on_focus_out(e, entry_return))
-entry_return.pack()
+set_placeholder(entry_return)
+entry_return.bind("<FocusIn>", lambda event: clear_placeholder(event, entry_return))
+entry_return.bind("<FocusOut>", lambda event: restore_placeholder(event, entry_return))
+entry_return.pack(pady=2)
 
-# Add Button
-btn_add = tk.Button(root, text="Add Hire Record", command=add_hire, width=20)
+# this creates the button that triggers the add record function when clicked
+btn_add = tk.Button(root, text="Add Hire Record", command=add_hire_record, bg="#27ae60", fg="white", font=("Helvetica", 10, "bold"), width=22)
 btn_add.pack(pady=10)
 
-# Display Listbox Frame with Scrollbars
-tk.Label(root, text="Current Hires Out:").pack()
+# this creates the section label for the saved items output display
+tk.Label(root, text="Current Hires Out:", font=("Helvetica", 11, "bold"), bg="#eef2f5").pack()
 
-list_frame = tk.Frame(root)
+# this creates a container frame to hold the listbox and its scrollbars together
+list_frame = tk.Frame(root, bg="#eef2f5")
 list_frame.pack(padx=10, pady=5)
 
+# this creates vertical and horizontal scrollbars for navigating long data entries
 v_scroll = tk.Scrollbar(list_frame, orient=tk.VERTICAL)
 v_scroll.pack(side=tk.RIGHT, fill=tk.Y)
 
 h_scroll = tk.Scrollbar(list_frame, orient=tk.HORIZONTAL)
 h_scroll.pack(side=tk.BOTTOM, fill=tk.X)
 
-listbox_hires = tk.Listbox(
-    list_frame, 
-    width=90, 
-    height=10, 
-    yscrollcommand=v_scroll.set, 
-    xscrollcommand=h_scroll.set
-)
+# this creates the listbox widget where saved hire records are displayed
+listbox_hires = tk.Listbox(list_frame, width=85, height=6, font=("Courier", 9), yscrollcommand=v_scroll.set, xscrollcommand=h_scroll.set)
 listbox_hires.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
+# this links the scrollbars directly to the listbox view
 v_scroll.config(command=listbox_hires.yview)
 h_scroll.config(command=listbox_hires.xview)
 
-# Management Buttons
-btn_delete = tk.Button(root, text="Delete Selected Hire", command=delete_hire, width=20)
-btn_delete.pack(pady=5)
+# this creates the button that deletes the selected row from the listbox
+btn_delete = tk.Button(root, text="Delete Selected Hire", command=delete_hire_record, bg="#e67e22", fg="white", font=("Helvetica", 10, "bold"), width=22)
+btn_delete.pack(pady=4)
 
-btn_print_raffle = tk.Button(root, text="Print Raffle List to Console", command=print_raffle_list, width=25)
-btn_print_raffle.pack(pady=5)
+# this creates the exit button to close down the application
+btn_exit = tk.Button(root, text="Exit / Close", command=close_application, bg="#7f8c8d", fg="white", font=("Helvetica", 10, "bold"), width=22)
+btn_exit.pack(pady=4)
 
-if __name__ == "__main__":
-    root.mainloop()
+# this starts the main tkinter event loop to keep the gui running and listening for user actions
+root.mainloop() 

@@ -135,8 +135,6 @@ root.title("Julie's Party Hire Tracking System")
 root.geometry("800x620")
 root.configure(bg="#eef2f5")
 
-# Action system management removal button
-btn_delete = tk.Button(root, text="Delete Selected Record", command=delete_hire_record, bg="#c0392b", fg="white", width=20)
-btn_delete.pack(pady=5)
-
-root.mainloop()
+# this creates the top main heading label with custom text size and colors
+lbl_title = tk.Label(root, text="Julie's Party Hire Tracking System", font=("Helvetica", 18, "bold"), bg="#eef2f5", fg="#2c3e50")
+lbl_title.pack(pady=10)

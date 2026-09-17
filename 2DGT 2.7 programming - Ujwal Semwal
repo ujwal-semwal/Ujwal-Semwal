@@ -48,9 +48,10 @@ def validate_inputs(name, receipt, item, qty_text, start_date, return_date):
 
     return True, quantity
 
-    index = selected[0]
-    del hire_list[index]
-    refresh_display()
+    def set_placeholder(entry_box):
+    # this function puts the default placeholder text inside the date entry box in grey
+    entry_box.insert(0, DATE_HINT)
+    entry_box.config(fg="grey")
 
 def refresh_display():
     # Clear visual window box and loop to show updated list arrays

@@ -129,10 +129,11 @@ def close_application():
     # this function closes and destroys the main tkinter window
     root.destroy()
 
-# Visual tracker list components 
-tk.Label(root, text="Current Hires Out:", font=("Helvetica", 10, "bold"), bg="#eef2f5").pack()
-listbox_hires = tk.Listbox(root, width=55, height=8)
-listbox_hires.pack(pady=5)
+# this sets up the main tkinter GUI window size and background colour
+root = tk.Tk()
+root.title("Julie's Party Hire Tracking System")
+root.geometry("800x620")
+root.configure(bg="#eef2f5")
 
 # Action system management removal button
 btn_delete = tk.Button(root, text="Delete Selected Record", command=delete_hire_record, bg="#c0392b", fg="white", width=20)

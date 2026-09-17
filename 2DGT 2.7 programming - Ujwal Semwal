@@ -153,3 +153,11 @@ entry_item.pack(pady=2)
 tk.Label(root, text=f"Quantity ({MIN_QTY}-{MAX_QTY}):", font=("Helvetica", 10, "bold"), bg="#eef2f5").pack(pady=(4, 0))
 entry_quantity = tk.Entry(root, width=40)
 entry_quantity.pack(pady=2)
+
+# this creates the start date box and listens for when the customer clicks it
+tk.Label(root, text="Date Hired From:", font=("Helvetica", 10, "bold"), bg="#eef2f5").pack(pady=(4, 0))
+entry_start = tk.Entry(root, width=40)
+set_placeholder(entry_start)
+entry_start.bind("<FocusIn>", lambda event: clear_placeholder(event, entry_start))
+entry_start.bind("<FocusOut>", lambda event: restore_placeholder(event, entry_start))
+entry_start.pack(pady=2)

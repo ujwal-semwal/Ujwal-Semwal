@@ -90,13 +90,20 @@ def add_hire_record():
     clear_form()
     messagebox.showinfo("Success", "Hire record added successfully!")
 
+def delete_hire_record():
+    # this function gets the selected index from listbox and removes it from the 2D hire list
+    selected = listbox_hires.curselection()
 
+    if not selected:
+        messagebox.showerror("Selection Error", "Please select a record from the list to delete.")
+        return
 
+    index = selected[0]
+    del hire_list[index]
 
-# Entry form layout section labels and inputs
-tk.Label(root, text="Customer Full Name:", font=("Helvetica", 10), bg="#eef2f5").pack()
-entry_name = tk.Entry(root, width=35)
-entry_name.pack(pady=2)
+    # this function refreshes the listbox display after removing the selected item
+    refresh_display()
+    messagebox.showinfo("Success", "Record deleted successfully.")
 
 tk.Label(root, text="Receipt Number:", font=("Helvetica", 10), bg="#eef2f5").pack()
 entry_receipt = tk.Entry(root, width=35)

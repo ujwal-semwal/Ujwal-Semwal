@@ -42,13 +42,11 @@ def validate_inputs(name, receipt, item, qty_text, start_date, return_date):
     except ValueError:
         return False, "Dates must follow DD/MM/YYYY format."
 
-def delete_hire_record():
-    # Remove selected row index from the list collection
-    selected = listbox_hires.curselection()
+# this function checks the validity of the return date so it is not before the hire date
+    if return_dt < start_dt:
+        return False, "Return date cannot be before hire start date."
 
-    if not selected:
-        messagebox.showerror("Selection Error", "Please select a record to delete.")
-        return
+    return True, quantity
 
     index = selected[0]
     del hire_list[index]

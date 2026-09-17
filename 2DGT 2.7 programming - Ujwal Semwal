@@ -73,8 +73,25 @@ def add_hire_record():
     start_date = entry_start.get().strip()
     return_date = entry_return.get().strip()
 
-# Application title element banner
-tk.Label(root, text="Party Hire System (Draft)", font=("Helvetica", 16, "bold"), bg="#eef2f5").pack(pady=10)
+# this function runs the validation subroutine and checks if inputs passed validity
+    is_valid, result = validate_inputs(name, receipt, item, qty_text, start_date, return_date)
+
+    if not is_valid:
+        messagebox.showerror("Input Error", result)
+        return
+
+    quantity = result
+
+    # this function appends a new list item into the main 2D hire list collection
+    hire_list.append([name, receipt, item, quantity, start_date, return_date])
+
+    # this function updates the listbox output and clears the input form
+    refresh_display()
+    clear_form()
+    messagebox.showinfo("Success", "Hire record added successfully!")
+
+
+
 
 # Entry form layout section labels and inputs
 tk.Label(root, text="Customer Full Name:", font=("Helvetica", 10), bg="#eef2f5").pack()

@@ -64,11 +64,14 @@ def restore_placeholder(event, entry_box):
     if not entry_box.get().strip():
         set_placeholder(entry_box)
 
-# Setup fundamental window window sizes
-root = tk.Tk()
-root.title("Julie's Party Hire - Prototype")
-root.geometry("500x550")
-root.configure(bg="#eef2f5")
+def add_hire_record():
+    # this function gets all string values entered into the gui entry boxes
+    name = entry_name.get().strip()
+    receipt = entry_receipt.get().strip()
+    item = entry_item.get().strip()
+    qty_text = entry_quantity.get().strip()
+    start_date = entry_start.get().strip()
+    return_date = entry_return.get().strip()
 
 # Application title element banner
 tk.Label(root, text="Party Hire System (Draft)", font=("Helvetica", 16, "bold"), bg="#eef2f5").pack(pady=10)

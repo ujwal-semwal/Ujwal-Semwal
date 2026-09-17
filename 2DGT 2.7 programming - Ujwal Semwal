@@ -138,3 +138,8 @@ root.configure(bg="#eef2f5")
 # this creates the top main heading label with custom text size and colors
 lbl_title = tk.Label(root, text="Julie's Party Hire Tracking System", font=("Helvetica", 18, "bold"), bg="#eef2f5", fg="#2c3e50")
 lbl_title.pack(pady=10)
+
+# this creates the label and text entry box for the customer full name
+tk.Label(root, text="Customer Full Name:", font=("Helvetica", 10, "bold"), bg="#eef2f5").pack(pady=(4, 0))
+entry_name = tk.Entry(root, width=40)
+entry_name.pack(pady=2)

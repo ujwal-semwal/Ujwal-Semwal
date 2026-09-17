@@ -10,22 +10,18 @@ DATE_HINT = "DD/MM/YYYY"
 # This main list holds all the saved hire records in one place as a 2D list
 hire_list = []
  
-def validate_inputs(name, receipt, item):
-    # Core function checks for blank inputs
-    if not name or not receipt or not item:
+def validate_inputs(name, receipt, item, qty_text, start_date, return_date):
+    # this function checks the validity of inputs to make sure no fields are left blank
+    if not name or not receipt or not item or not qty_text or not start_date or not return_date:
         return False, "All fields must be filled in."
  
-    # Core function checks that receipt is numbers only 
-    if not receipt.isdigit():
-        return False, "Receipt number must be numbers only."
+   # this function checks the validity of date fields to make sure default placeholders are replaced
+    if start_date == DATE_HINT or return_date == DATE_HINT:
+        return False, "Please enter actual dates, not placeholders."
 
-    return True, None
-
-def add_hire_record():
-    # Fetch string values from input entry boxes
-    name = entry_name.get().strip()
-    receipt = entry_receipt.get().strip()
-    item = entry_item.get().strip()
+# this function checks the validity of the customer name so it only contains letters and spaces
+    if not name.replace(" ", "").isalpha():
+        return False, "Customer name can only contain letters."
 
     # Run core validation routine
     is_valid, error_msg = validate_inputs(name, receipt, item)

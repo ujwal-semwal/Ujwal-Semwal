@@ -23,12 +23,13 @@ def validate_inputs(name, receipt, item, qty_text, start_date, return_date):
     if not name.replace(" ", "").isalpha():
         return False, "Customer name can only contain letters."
 
-    # Run core validation routine
-    is_valid, error_msg = validate_inputs(name, receipt, item)
+    # this function checks the validity of the receipt number so it only contains numbers
+    if not receipt.isdigit():
+        return False, "Receipt number must be numbers only."
 
-    if not is_valid:
-        messagebox.showerror("Input Error", error_msg)
-        return
+    # this function checks the validity of the quantity so it is a whole number within limits
+    if not qty_text.isdigit():
+        return False, "Quantity must be a valid whole number."
 
     # Append new record to the main collection
     hire_list.append([name, receipt, item])

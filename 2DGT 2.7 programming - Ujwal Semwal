@@ -180,3 +180,7 @@ tk.Label(root, text="Current Hires Out:", font=("Helvetica", 11, "bold"), bg="#e
 # this creates a container frame to hold the listbox and its scrollbars together
 list_frame = tk.Frame(root, bg="#eef2f5")
 list_frame.pack(padx=10, pady=5)
+
+# this creates vertical and horizontal scrollbars for navigating long data entries
+v_scroll = tk.Scrollbar(list_frame, orient=tk.VERTICAL)
+v_scroll.pack(side=tk.RIGHT, fill=tk.Y)

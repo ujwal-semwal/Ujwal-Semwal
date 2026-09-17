@@ -195,3 +195,7 @@ listbox_hires.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 # this links the scrollbars directly to the listbox view
 v_scroll.config(command=listbox_hires.yview)
 h_scroll.config(command=listbox_hires.xview)
+
+# this creates the button that deletes the selected row from the listbox
+btn_delete = tk.Button(root, text="Delete Selected Hire", command=delete_hire_record, bg="#e67e22", fg="white", font=("Helvetica", 10, "bold"), width=22)
+btn_delete.pack(pady=4)

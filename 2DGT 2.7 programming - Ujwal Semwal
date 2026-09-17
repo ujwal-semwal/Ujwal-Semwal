@@ -199,3 +199,7 @@ h_scroll.config(command=listbox_hires.xview)
 # this creates the button that deletes the selected row from the listbox
 btn_delete = tk.Button(root, text="Delete Selected Hire", command=delete_hire_record, bg="#e67e22", fg="white", font=("Helvetica", 10, "bold"), width=22)
 btn_delete.pack(pady=4)
+
+# this creates the exit button to close down the application
+btn_exit = tk.Button(root, text="Exit / Close", command=close_application, bg="#7f8c8d", fg="white", font=("Helvetica", 10, "bold"), width=22)
+btn_exit.pack(pady=4)

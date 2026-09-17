@@ -1,8 +1,14 @@
+import datetime
 import tkinter as tk
 from tkinter import messagebox
 
-# This main list holds all the saved hire records in a 2D list
-hire_list = [] 
+# These numbers and text limits stay the same so the gui runs according to the requirements
+MIN_QTY = 1
+MAX_QTY = 500
+DATE_HINT = "DD/MM/YYYY"
+
+# This main list holds all the saved hire records in one place as a 2D list
+hire_list = []
  
 def validate_inputs(name, receipt, item):
     # Core function checks for blank inputs

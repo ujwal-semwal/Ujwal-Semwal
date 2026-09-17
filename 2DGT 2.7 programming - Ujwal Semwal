@@ -173,3 +173,6 @@ entry_return.pack(pady=2)
 # this creates the button that triggers the add record function when clicked
 btn_add = tk.Button(root, text="Add Hire Record", command=add_hire_record, bg="#27ae60", fg="white", font=("Helvetica", 10, "bold"), width=22)
 btn_add.pack(pady=10)
+
+# this creates the section label for the saved items output display
+tk.Label(root, text="Current Hires Out:", font=("Helvetica", 11, "bold"), bg="#eef2f5").pack()

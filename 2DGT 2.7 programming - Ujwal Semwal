@@ -48,17 +48,16 @@ def validate_inputs(name, receipt, item, qty_text, start_date, return_date):
 
     return True, quantity
 
-    def set_placeholder(entry_box):
+ def set_placeholder(entry_box):
     # this function puts the default placeholder text inside the date entry box in grey
     entry_box.insert(0, DATE_HINT)
     entry_box.config(fg="grey")
 
-def refresh_display():
-    # Clear visual window box and loop to show updated list arrays
-    listbox_hires.delete(0, tk.END)
-    for row in hire_list:
-        display_string = f"Customer Name: {row[0]}  |  Receipt #: {row[1]}  |  Item: {row[2]}"
-        listbox_hires.insert(tk.END, display_string)
+def clear_placeholder(event, entry_box):
+    # this function clears the placeholder text when the user clicks inside the entry box
+    if entry_box.get() == DATE_HINT:
+        entry_box.delete(0, tk.END)
+        entry_box.config(fg="black")
 
 def clear_form():
     # Reset simple text windows to empty strings

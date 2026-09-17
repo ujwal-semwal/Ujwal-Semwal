@@ -143,3 +143,4 @@ lbl_title.pack(pady=10)
 tk.Label(root, text="Customer Full Name:", font=("Helvetica", 10, "bold"), bg="#eef2f5").pack(pady=(4, 0))
 entry_name = tk.Entry(root, width=40)
 entry_name.pack(pady=2)
+

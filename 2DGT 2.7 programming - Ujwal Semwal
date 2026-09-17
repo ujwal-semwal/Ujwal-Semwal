@@ -187,3 +187,7 @@ v_scroll.pack(side=tk.RIGHT, fill=tk.Y)
 
 h_scroll = tk.Scrollbar(list_frame, orient=tk.HORIZONTAL)
 h_scroll.pack(side=tk.BOTTOM, fill=tk.X)
+
+# this creates the listbox widget where saved hire records are displayed
+listbox_hires = tk.Listbox(list_frame, width=85, height=6, font=("Courier", 9), yscrollcommand=v_scroll.set, xscrollcommand=h_scroll.set)
+listbox_hires.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)

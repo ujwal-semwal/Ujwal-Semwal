@@ -31,8 +31,9 @@ def validate_inputs(name, receipt, item, qty_text, start_date, return_date):
     if not qty_text.isdigit():
         return False, "Quantity must be a valid whole number."
 
-    # Append new record to the main collection
-    hire_list.append([name, receipt, item])
+   quantity = int(qty_text)
+    if quantity < MIN_QTY or quantity > MAX_QTY:
+        return False, f"Quantity must be between {MIN_QTY} and {MAX_QTY}."
 
     # Update listbox and wipe text fields clean
     refresh_display()

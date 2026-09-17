@@ -112,10 +112,18 @@ def refresh_display():
         display_string = f"Name: {row[0]} | Receipt #: {row[1]} | Item: {row[2]} | Qty: {row[3]} | Start: {row[4]} | Return: {row[5]}"
         listbox_hires.insert(tk.END, display_string)
 
+def clear_form():
+    # this function resets all text entry boxes back to blank or default placeholders
+    entry_name.delete(0, tk.END)
+    entry_receipt.delete(0, tk.END)
+    entry_item.delete(0, tk.END)
+    entry_quantity.delete(0, tk.END)
 
-tk.Label(root, text="Item Hired:", font=("Helvetica", 10), bg="#eef2f5").pack()
-entry_item = tk.Entry(root, width=35)
-entry_item.pack(pady=2)
+    entry_start.delete(0, tk.END)
+    set_placeholder(entry_start)
+
+    entry_return.delete(0, tk.END)
+    set_placeholder(entry_return)
 
 # Action system management submit button
 btn_add = tk.Button(root, text="Add Hire Record", command=add_hire_record, bg="#27ae60", fg="white", width=20)

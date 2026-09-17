@@ -35,10 +35,12 @@ def validate_inputs(name, receipt, item, qty_text, start_date, return_date):
     if quantity < MIN_QTY or quantity > MAX_QTY:
         return False, f"Quantity must be between {MIN_QTY} and {MAX_QTY}."
 
-    # Update listbox and wipe text fields clean
-    refresh_display()
-    clear_form()
-    messagebox.showinfo("Success", "Record added successfully!")
+ # this function checks the validity of dates for correct format and logical timeline order
+    try:
+        start_dt = datetime.datetime.strptime(start_date, "%d/%m/%Y")
+        return_dt = datetime.datetime.strptime(return_date, "%d/%m/%Y")
+    except ValueError:
+        return False, "Dates must follow DD/MM/YYYY format."
 
 def delete_hire_record():
     # Remove selected row index from the list collection

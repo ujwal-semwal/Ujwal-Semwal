@@ -169,3 +169,7 @@ set_placeholder(entry_return)
 entry_return.bind("<FocusIn>", lambda event: clear_placeholder(event, entry_return))
 entry_return.bind("<FocusOut>", lambda event: restore_placeholder(event, entry_return))
 entry_return.pack(pady=2)
+
+# this creates the button that triggers the add record function when clicked
+btn_add = tk.Button(root, text="Add Hire Record", command=add_hire_record, bg="#27ae60", fg="white", font=("Helvetica", 10, "bold"), width=22)
+btn_add.pack(pady=10)

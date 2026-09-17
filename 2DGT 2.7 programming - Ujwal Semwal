@@ -105,9 +105,13 @@ def delete_hire_record():
     refresh_display()
     messagebox.showinfo("Success", "Record deleted successfully.")
 
-tk.Label(root, text="Receipt Number:", font=("Helvetica", 10), bg="#eef2f5").pack()
-entry_receipt = tk.Entry(root, width=35)
-entry_receipt.pack(pady=2)
+def refresh_display():
+    # this function clears the listbox and loops through the 2D hire list to display formatted records
+    listbox_hires.delete(0, tk.END)
+    for row in hire_list:
+        display_string = f"Name: {row[0]} | Receipt #: {row[1]} | Item: {row[2]} | Qty: {row[3]} | Start: {row[4]} | Return: {row[5]}"
+        listbox_hires.insert(tk.END, display_string)
+
 
 tk.Label(root, text="Item Hired:", font=("Helvetica", 10), bg="#eef2f5").pack()
 entry_item = tk.Entry(root, width=35)

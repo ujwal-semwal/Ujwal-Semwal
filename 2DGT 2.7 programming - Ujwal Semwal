@@ -59,11 +59,10 @@ def clear_placeholder(event, entry_box):
         entry_box.delete(0, tk.END)
         entry_box.config(fg="black")
 
-def clear_form():
-    # Reset simple text windows to empty strings
-    entry_name.delete(0, tk.END)
-    entry_receipt.delete(0, tk.END)
-    entry_item.delete(0, tk.END)
+def restore_placeholder(event, entry_box):
+    # this function brings back the placeholder text if the entry box is left empty
+    if not entry_box.get().strip():
+        set_placeholder(entry_box)
 
 # Setup fundamental window window sizes
 root = tk.Tk()

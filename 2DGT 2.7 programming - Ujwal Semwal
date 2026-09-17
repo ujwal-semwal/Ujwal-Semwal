@@ -184,3 +184,6 @@ list_frame.pack(padx=10, pady=5)
 # this creates vertical and horizontal scrollbars for navigating long data entries
 v_scroll = tk.Scrollbar(list_frame, orient=tk.VERTICAL)
 v_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+
+h_scroll = tk.Scrollbar(list_frame, orient=tk.HORIZONTAL)
+h_scroll.pack(side=tk.BOTTOM, fill=tk.X)
